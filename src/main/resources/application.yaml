@@ -1,0 +1,40 @@
+sms:
+  smpp:
+    host: 171.244.52.73
+    port: 21
+    user-id: stvnetmnp
+    password: VnStMnp@6886#
+    srcServer: /
+    srcClient: /appsms/mnp-sync-ftp/ftp-queue/
+    srcClientBackup: /appsms/mnp-sync-ftp/ftp-backup/
+#    srcClient: E:\\Tmp\\FTP\\
+#    srcClientBackup: E:\\Tmp\\FTP_BACKUP\\
+
+
+    requestDelivery: true
+    sourceAddress: VNetMonitor
+    destAddress: 84967890123
+    urlApi: http://171.244.52.61:8083/api/sentEx?
+    maxTimeToDelayConfig: 4000
+    allowSendAlert: true
+    emailTo: kienng2012@gmail.com
+    emailCc: ngkien161089@gmail.com
+    emailsCc: ducvnet@gmail.com, truongthien2310@gmail.com
+    userForApiCallback: vnet_monitor
+    passwordForApiCallback: MNTVntSe@6888V#
+#  spring:
+#    mail:
+#      host: smtp.gmail.com
+#      port: 587
+#      username: alert.vnet68@gmail.com
+#      password: ysxogoytxlywnbxp
+#      properties:
+#        mail:
+#          smtp:
+#            auth: true
+#            starttls:
+#              enable: true
+  async:
+    initial-delay: 5000
+    time-monitor: 3600000
+
