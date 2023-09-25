@@ -1,6 +1,6 @@
 sms:
   smpp:
-    host: 171.244.52.73
+    host: 171.244.52.75
     port: 21
     user-id: stvnetmnp
     password: VnStMnp@6886#
