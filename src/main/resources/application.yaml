@@ -37,4 +37,5 @@ sms:
   async:
     initial-delay: 5000
     time-monitor: 3600000
+    time-delete-file: 0 0 11 * * ?
 

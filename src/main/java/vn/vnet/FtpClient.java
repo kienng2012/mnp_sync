@@ -64,4 +64,8 @@ class FtpClient {
         ftp.retrieveFile(source, out);
         out.close();
     }
+
+    void deleteFile(String remoteFile) throws IOException {
+        ftp.deleteFile(remoteFile);
+    }
 }

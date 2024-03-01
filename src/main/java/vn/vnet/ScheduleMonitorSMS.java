@@ -75,16 +75,19 @@ public class ScheduleMonitorSMS {
             Date yesterday = c.getTime();
             c.add(Calendar.DATE, -1);
             Date beforeYesterday = c.getTime();
+            c.add(Calendar.DATE, -1);
+            Date before3day = c.getTime();
             String strCurrentDate = sdfFormatDayStr.format(now);
             String strYesterdayDate = sdfFormatDayStr.format(yesterday);
             String strBeforeYesterdayDate = sdfFormatDayStr.format(beforeYesterday);
-            List<String> lstFilesToDownload = files.stream().filter(s -> s.endsWith(EXTENSION_FTP_FILE) && (s.contains(strCurrentDate) || s.contains(strYesterdayDate) || s.contains(strBeforeYesterdayDate))).collect(Collectors.toList());
+            String strLast3day = sdfFormatDayStr.format(before3day);
+            List<String> lstFilesToDownload = files.stream().filter(s -> s.endsWith(EXTENSION_FTP_FILE) && (s.contains(strCurrentDate) || s.contains(strYesterdayDate) || s.contains(strBeforeYesterdayDate) || s.contains(strLast3day))).collect(Collectors.toList());
             lstFilesToDownload.stream().forEach(s -> {
                 try {
                     Path pathToSave = Paths.get(srcClient);
                     Files.createDirectories(pathToSave);
 //                    ftpClient.downloadFile(s, Paths.get(srcClient + "\\" + s).toAbsolutePath().toString()); //TODO : OPEN CMT to DOWLOAD FILE
-                    ftpClient.downloadFile(s, Paths.get(srcClient  + s).toAbsolutePath().toString()); //TODO : OPEN CMT to DOWLOAD FILE
+                    ftpClient.downloadFile(s, Paths.get(srcClient + s).toAbsolutePath().toString()); //TODO : OPEN CMT to DOWLOAD FILE
                 } catch (IOException e) {
                     log.error(" [ERROR]Cannot download file. Detail ={}", e);
 //                    throw new RuntimeException(e);
@@ -94,6 +97,47 @@ public class ScheduleMonitorSMS {
             this.syncMnpToDB();
             //IMPORTANT: Sau khi dong bo du lieu vao bang MNP_QUEUE ==> goi thu tuc [SYNC_MNPSA_FROM_MNP_QUEUE] de dong bo vao bang MNPSA
             mnpQueueRepository.syncMNPSAFromMnpQueue();
+        } catch (IOException e) {
+            log.error(" [ERROR]Cannot login ftp. Detail ={}", e);
+//            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * https://www.freeformatter.com/cron-expression-generator-quartz.html
+     */
+    @Scheduled(cron = "${sms.async.time-delete-file}")
+//    @Scheduled(initialDelayString = "${sms.async.initial-delay}", fixedDelayString = "1000")
+    public void scheduleDeleteOldFileInFtp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        Date now = new Date();
+        log.info("[scheduleDeleteOldFileInFtp] at :" + sdf.format(now));
+        ftpClient = new FtpClient(host, port, username, password);
+        try {
+            ftpClient.open();
+            Collection<String> files = ftpClient.listFiles(srcServer);
+            //Get currentDate & yesterday :
+            Calendar c = Calendar.getInstance();
+            c.setTime(now);
+            c.add(Calendar.DATE, -1);
+            Date yesterday = c.getTime();
+            c.add(Calendar.DATE, -1);
+            Date beforeYesterday = c.getTime();
+            c.add(Calendar.DATE, -1);
+            Date before3day = c.getTime();
+            String strCurrentDate = sdfFormatDayStr.format(now);
+            String strYesterdayDate = sdfFormatDayStr.format(yesterday);
+            String strBeforeYesterdayDate = sdfFormatDayStr.format(beforeYesterday);
+            String strLast3day = sdfFormatDayStr.format(before3day);
+            List<String> lstFilesToDownload = files.stream().filter(s -> s.endsWith(EXTENSION_FTP_FILE) && !s.contains(strCurrentDate) && !s.contains(strYesterdayDate) && !s.contains(strBeforeYesterdayDate) && !s.contains(strLast3day)).collect(Collectors.toList());
+            lstFilesToDownload.stream().forEach(s -> {
+                try {
+                    ftpClient.deleteFile(s);
+                } catch (IOException e) {
+                    log.error(" [ERROR]Cannot delete file: {}. Detail ={}", s, e);
+//                    throw new RuntimeException(e);
+                }
+            });
         } catch (IOException e) {
             log.error(" [ERROR]Cannot login ftp. Detail ={}", e);
 //            throw new RuntimeException(e);
@@ -150,12 +194,15 @@ public class ScheduleMonitorSMS {
                     log.info("FILE_SYNC_BEFORE => DO NOT SYNC NOW, FILE_NAME ={}", file.getName());
                 }
 
+                /*
                 //Sau khi doc file xong move vao thu muc backup
                 Path directoryBackupFile = Paths.get(srcClientBackup);
                 Files.createDirectories(directoryBackupFile);
                 Path pathBackupFile = Paths.get(directoryBackupFile +File.separator + file.getName());
                 //backup ra thu muc moi
                 Files.copy(Paths.get(file.getAbsolutePath()), pathBackupFile, StandardCopyOption.REPLACE_EXISTING);
+
+                 */
                 //Xoa file da xu ly
                 file.delete();
             } catch (Exception e) {

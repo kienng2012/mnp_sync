@@ -34,6 +34,16 @@ public class ApplicationProperties {
 
 		private int timeout = 10000;
 
+		public String timeDeleteFile ="0 0 1 * * ?";
+
+		public String getTimeDeleteFile() {
+			return timeDeleteFile;
+		}
+
+		public void setTimeDeleteFile(String timeDeleteFile) {
+			this.timeDeleteFile = timeDeleteFile;
+		}
+
 		public int getSmppSessionSize() {
 			return smppSessionSize;
 		}
