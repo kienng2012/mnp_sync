@@ -15,7 +15,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -185,8 +184,7 @@ public class ScheduleMonitorSMS {
 //                    throw new RuntimeException(e);
                         }
                     }
-                    if (mnpQueues.size() > 0)
-                        mnpQueueRepository.saveAll(mnpQueues);
+                    if (mnpQueues.size() > 0) mnpQueueRepository.saveAll(mnpQueues);
                     //Luu lai file da xu ly de ko xu ly lan sau nua
                     MNPFileSync mnpFileSync = new MNPFileSync(new Timestamp(System.currentTimeMillis()), file.getName());
                     mnpFileSyncRepository.save(mnpFileSync);
@@ -213,8 +211,7 @@ public class ScheduleMonitorSMS {
 
 
     private String getTelcoCodeFromMNP(String code) {
-        if (code == null || code.trim().length() == 0)
-            return "unknown";
+        if (code == null || code.trim().length() == 0) return "unknown";
         String telcoCode;
         code = code.trim();
         switch (code) {

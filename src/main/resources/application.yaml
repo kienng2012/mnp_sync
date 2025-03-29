@@ -1,14 +1,15 @@
 sms:
   smpp:
-    host: 171.244.52.75
+    #    host: 171.244.52.75
+    host: 10.19.10.135
     port: 21
     user-id: stvnetmnp
     password: VnStMnp@6886#
     srcServer: /
     srcClient: /appsms/mnp-sync-ftp/ftp-queue/
     srcClientBackup: /appsms/mnp-sync-ftp/ftp-backup/
-#    srcClient: E:\\Tmp\\FTP\\
-#    srcClientBackup: E:\\Tmp\\FTP_BACKUP\\
+    #    srcClient: E:\\Tmp\\FTP\\
+    #    srcClientBackup: E:\\Tmp\\FTP_BACKUP\\
 
 
     requestDelivery: true
@@ -22,18 +23,18 @@ sms:
     emailsCc: ducvnet@gmail.com, truongthien2310@gmail.com
     userForApiCallback: vnet_monitor
     passwordForApiCallback: MNTVntSe@6888V#
-#  spring:
-#    mail:
-#      host: smtp.gmail.com
-#      port: 587
-#      username: alert.vnet68@gmail.com
-#      password: ysxogoytxlywnbxp
-#      properties:
-#        mail:
-#          smtp:
-#            auth: true
-#            starttls:
-#              enable: true
+  #  spring:
+  #    mail:
+  #      host: smtp.gmail.com
+  #      port: 587
+  #      username: alert.vnet68@gmail.com
+  #      password: ysxogoytxlywnbxp
+  #      properties:
+  #        mail:
+  #          smtp:
+  #            auth: true
+  #            starttls:
+  #              enable: true
   async:
     initial-delay: 5000
     time-monitor: 3600000
