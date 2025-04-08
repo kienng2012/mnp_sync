@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import vn.vnet.entity.MNPFileSync;
 import vn.vnet.entity.MNPQueue;
 import vn.vnet.repository.MNPFileSyncRepository;
@@ -25,8 +26,9 @@ import java.util.stream.Collectors;
  * Ref call api :https://www.baeldung.com/java-ftp-client
  * https://github.com/eugenp/tutorials/tree/master/core-java-modules/core-java-networking-2
  */
-@Component
+//@Component
 @Log4j2
+@Service
 public class ScheduleMonitorSMS {
 
     final SimpleDateFormat sdfFormatDayStr = new SimpleDateFormat("yyyyMMdd");
@@ -61,6 +63,8 @@ public class ScheduleMonitorSMS {
 //    @Scheduled(initialDelayString = "${sms.async.initial-delay}", fixedDelayString = "1000")
     public void scheduleDownloadFileFtp() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        long beginTime = System.currentTimeMillis();
+        log.info("[scheduleDownloadFileFtp] BEGIN at time: {}", sdf.format(new Timestamp(beginTime)));
         Date now = new Date();
 
         ftpClient = new FtpClient(host, port, username, password);
@@ -100,6 +104,7 @@ public class ScheduleMonitorSMS {
             log.error(" [ERROR]Cannot login ftp. Detail ={}", e);
 //            throw new RuntimeException(e);
         }
+        log.info("[scheduleDownloadFileFtp] END at time: {}. Take along:{} (s)", sdf.format(new Timestamp(beginTime)), (System.currentTimeMillis() - beginTime) / 1000);
     }
 
     /**
