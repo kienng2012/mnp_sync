@@ -5,7 +5,6 @@ import org.apache.commons.io.comparator.NameFileComparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import vn.vnet.entity.MNPFileSync;
 import vn.vnet.entity.MNPQueue;
@@ -84,6 +83,7 @@ public class ScheduleMonitorSMS {
             String strYesterdayDate = sdfFormatDayStr.format(yesterday);
             String strBeforeYesterdayDate = sdfFormatDayStr.format(beforeYesterday);
             String strLast3day = sdfFormatDayStr.format(before3day);
+            log.info("Find file contains files: {} - {} - {} - {}", strCurrentDate, strYesterdayDate, strBeforeYesterdayDate, strLast3day);
             List<String> lstFilesToDownload = files.stream().filter(s -> s.endsWith(EXTENSION_FTP_FILE) && (s.contains(strCurrentDate) || s.contains(strYesterdayDate) || s.contains(strBeforeYesterdayDate) || s.contains(strLast3day))).collect(Collectors.toList());
             lstFilesToDownload.stream().forEach(s -> {
                 try {
