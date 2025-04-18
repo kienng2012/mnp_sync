@@ -8,16 +8,16 @@
     </Properties>
     <Appenders>
         <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout pattern="${LOG_PATTERN}" />
+            <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
 
         <RollingFile name="file"
                      fileName="${APP_LOG_ROOT}/app.log"
                      filePattern="${APP_LOG_ROOT}/app-%d{yyyy-MM-dd}.log">
-            <PatternLayout pattern="${LOG_PATTERN}" />
+            <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
-                <OnStartupTriggeringPolicy />
-                <SizeBasedTriggeringPolicy size="500MB" />
+                <OnStartupTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="500MB"/>
                 <!-- Auto create file by daily -->
                 <TimeBasedTriggeringPolicy/>
             </Policies>
@@ -25,7 +25,7 @@
             <DefaultRolloverStrategy max="10">
                 <Delete basePath="${APP_LOG_ROOT}" maxDepth="10">
                     <!-- Delete all files older than 30 days -->
-                    <IfLastModified age="45d" />
+                    <IfLastModified age="45d"/>
                 </Delete>
             </DefaultRolloverStrategy>
         </RollingFile>
@@ -33,8 +33,8 @@
     </Appenders>
     <Loggers>
         <Root level="info">
-            <AppenderRef ref="console" />
-            <AppenderRef ref="file" />
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="file"/>
         </Root>
     </Loggers>
 </Configuration>
