@@ -58,6 +58,11 @@ public class ScheduleMonitorSMS {
     @Autowired
     private MNPFileSyncRepository mnpFileSyncRepository;
 
+    public ScheduleMonitorSMS() {
+        log.info("Bean ScheduleMonitorSMS has been created....");
+    }
+
+
     @Scheduled(initialDelayString = "${sms.async.initial-delay}", fixedDelayString = "${sms.async.time-monitor}")
 //    @Scheduled(initialDelayString = "${sms.async.initial-delay}", fixedDelayString = "1000")
     public void scheduleDownloadFileFtp() {
@@ -83,8 +88,12 @@ public class ScheduleMonitorSMS {
             String strYesterdayDate = sdfFormatDayStr.format(yesterday);
             String strBeforeYesterdayDate = sdfFormatDayStr.format(beforeYesterday);
             String strLast3day = sdfFormatDayStr.format(before3day);
+
             log.info("Find file contains files: {} - {} - {} - {}", strCurrentDate, strYesterdayDate, strBeforeYesterdayDate, strLast3day);
-            List<String> lstFilesToDownload = files.stream().filter(s -> s.endsWith(EXTENSION_FTP_FILE) && (s.contains(strCurrentDate) || s.contains(strYesterdayDate) || s.contains(strBeforeYesterdayDate) || s.contains(strLast3day))).collect(Collectors.toList());
+            List<String> lstFilesToDownload = files.stream().filter(s -> s.endsWith(EXTENSION_FTP_FILE) && (s.contains(strCurrentDate) || s.contains(strYesterdayDate) || s.contains(strBeforeYesterdayDate) || s.contains(strLast3day)
+
+
+            )).collect(Collectors.toList());
             lstFilesToDownload.stream().forEach(s -> {
                 try {
                     Path pathToSave = Paths.get(srcClient);
